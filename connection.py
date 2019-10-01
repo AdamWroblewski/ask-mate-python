@@ -2,12 +2,11 @@ import csv
 
 
 def read_csv_data(file_name):
+    post_list = []
     with open(file_name) as posts:
-        reader = csv.reader(posts)
-
-        file_data = []
+        reader = csv.DictReader(posts)
 
         for post in reader:
-            file_data.append(post)
+            post_list.append(post)
 
-        return file_data
+    return post_list
