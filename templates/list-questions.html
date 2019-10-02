@@ -7,11 +7,9 @@
 <body>
 
     <table>
-        <tr>
-            {% for title in titles %}
-                <h3><a href="{{url_for('question_route', question_id=loop.index)}}">{{title}}</a></h3>
-            {% endfor %}
-        </tr>
+        {% for title in titles %}
+            <tr><td><h3><a href="{{url_for('question_route', question_id=loop.index)}}">{{title}}</a></h3></td></tr>
+        {% endfor %}
     </table>
 
 </body>
