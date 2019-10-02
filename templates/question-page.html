@@ -5,6 +5,16 @@
     <title>Question page</title>
 </head>
 <body>
-    <h1>abc</h1>
+    <div>
+        <div>
+            <div><span style="font-size: 2em">{{post['title']}}</span>, votes: {{post['vote_number']}}</div>
+            <div>{{post['submission_time']}}</div>
+        </div>
+        <div>{{post['message']}}</div>
+        {% if post['image'] %}
+            <img src="{{url_for('static', filename=post['image'])}}">
+        {% endif %}
+        <div>{{post['view_number']}}</div>
+    </div>
 </body>
 </html>
