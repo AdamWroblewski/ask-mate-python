@@ -17,7 +17,7 @@ def get_all_questions():
     for post in posts:
         try:
             util.conver_to_int(post, 'id', 'submission_time', 'view_number', 'vote_number')
-        except ValueError:
+        except:
             return None
 
     return posts
@@ -35,8 +35,9 @@ def get_all_answers():
     answers = connection.read_csv_data('sample_data/answer.csv')
     for answer in answers:
         try:
-            util.conver_to_int(answer, 'id', 'submission_time', 'view_number', 'question_id')
+            util.conver_to_int(answer, 'id', 'submission_time', 'view_number', 'vote_number', 'question_id')
         except ValueError:
             return None
 
     return answers
+
