@@ -16,10 +16,7 @@ def get_all_questions():
     posts = connection.read_csv_data('sample_data/question.csv')
     for post in posts:
         try:
-            post['id'] = int(post['id'])
-            post['submission_time'] = int(post['submission_time'])
-            post['view_number'] = int(post['view_number'])
-            post['vote_number'] = int(post['vote_number'])
+            util.conver_to_int(post, 'id', 'submission_time', 'view_number', 'vote_number')
         except ValueError:
             return None
 
@@ -38,7 +35,7 @@ def get_all_answers():
     answers = connection.read_csv_data('sample_data/answer.csv')
     for answer in answers:
         try:
-            util.conver_to_int(answer, 'id', 'submission_time', 'view_number', 'vote_number')
+            util.conver_to_int(answer, 'id', 'submission_time', 'view_number', 'question_id')
         except ValueError:
             return None
 
