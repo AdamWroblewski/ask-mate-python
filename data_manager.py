@@ -9,3 +9,7 @@ def get_post_title():
         titles.append(post['title'])
 
     return titles
+
+
+def get_all_questions():
+    return connection.read_csv_data('sample_data/question.csv')
