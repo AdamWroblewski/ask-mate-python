@@ -19,6 +19,7 @@ def question_route(question_id):
     if question_id is None:
         return redirect('/')
     post = data_manager.get_question_by_id(question_id)
+    post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
     return render_template('question-page.html', post=post)
 
 
