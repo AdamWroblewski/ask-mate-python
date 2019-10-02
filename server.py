@@ -13,9 +13,13 @@ def list_route():
     return render_template('list-questions.html', questions=sorted_titles)
 
 
-@app.route('/question/<question_id>')
-def question_route(question_id=None):
-    return render_template('question-page.html')
+@app.route('/question', defaults={'question_id': None})
+@app.route('/question/<int:question_id>')
+def question_route(question_id):
+    if question_id is None:
+        return redirect('/')
+    post = data_manager.get_question_by_id(question_id)
+    return render_template('question-page.html', post=post)
 
 
 if __name__ == '__main__':
