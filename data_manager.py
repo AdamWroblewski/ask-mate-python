@@ -50,7 +50,8 @@ def find_max_id(file_name):
 
 
 def add_new_question(title, msg, img=None):
-    question = dict.fromkeys(connection.QUESTION_HEADERS, 0)
+    question_headers = connection.QUESTION_HEADERS
+    question = dict.fromkeys(question_headers, 0)
 
     question['id'] = find_max_id('sample_data/question.csv') + 1
     question['submission_time'] = int(time())
@@ -58,16 +59,19 @@ def add_new_question(title, msg, img=None):
     question['title'] = title
     question['message'] = msg
 
-    connection.append_csv_data('sample_data/question.csv', question)
+    connection.append_csv_data('sample_data/question.csv', question, question_headers)
 
     return question['id']
 
 
 def add_new_answer(msg, id, img=None):
-    answer = dict.fromkeys(connection.ANSWER_HEADERS, 0)
+    answer_headers = connection.ANSWER_HEADERS
+    answer = dict.fromkeys(answer_headers, 0)
 
     answer['id'] = find_max_id('sample_data/answer.csv')
     answer['submission_time'] = int(time())
     answer['message'] = msg
     answer['image'] = img
     answer['question_id'] = id
+
+    connection.append_csv_data('sample_data/answer.csv', answer, answer_headers)
