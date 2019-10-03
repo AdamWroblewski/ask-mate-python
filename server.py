@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, escape, render_template, request, redirect, url_for
 import data_manager
 import util
 
@@ -22,6 +22,18 @@ def question_route(question_id):
     post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
     answers = data_manager.get_all_answers()
     return render_template('question-page.html', post=post, answers=answers)
+
+
+@app.route('/add-question', methods=['POST', 'GET'])
+def add_question_route():
+    if request.method == 'GET':
+        return render_template('question-edit-page.html')
+    else:
+        title = escape(request.form['title'])
+        msg = escape(request.form['message'])
+        question_id = data_manager.add_new_question(title, msg)
+        print(msg)
+        return redirect(url_for('question_route', question_id=question_id))
 
 
 if __name__ == '__main__':
