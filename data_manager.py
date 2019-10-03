@@ -1,5 +1,6 @@
 import connection
 import util
+from time import time
 
 
 def get_post_title():
@@ -40,3 +41,22 @@ def get_all_answers():
             return None
 
     return answers
+
+
+def find_max_question_id():
+    questions = connection.read_csv_data('sample_data/question.csv')
+    return int(questions[-1]['id'])
+
+
+def add_new_question(title, msg, img=None):
+    question = dict.fromkeys(connection.QUESTION_HEADERS, 0)
+
+    question['id'] = find_max_question_id() + 1
+    question['submission_time'] = int(time())
+    question['image'] = img
+    question['title'] = title
+    question['message'] = msg
+
+    connection.append_csv_data('sample_data/question.csv', question)
+
+    return question['id']
