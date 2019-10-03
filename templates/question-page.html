@@ -6,6 +6,7 @@
 </head>
 <body>
     <div>
+        <h1><a href="{{url_for('answer_route', question_id=question_id)}}">Add answer</a></h1>
         <div>
             <div><span class="title">{{post['title']}}</span>, <span>votes: {{post['vote_number']}}</span></div>
             <div>{{post['submission_time']}}</div>
