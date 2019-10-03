@@ -42,7 +42,6 @@ def answer_route(question_id=None):
     else:
         msg = request.form['answer-msg']
         id = request.form['id']
-        print(msg,id)
         data_manager.add_new_answer(msg, id)
         return redirect(url_for('question_route', question_id=question_id))
 
