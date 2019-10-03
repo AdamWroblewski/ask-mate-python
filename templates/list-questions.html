@@ -7,6 +7,7 @@
 <body>
 
     <table>
+        <h1><a href="{{url_for('add_question_route')}}">Ask a question.</a></h1>
         {% for question in questions %}
             <tr><td><h3><a href="{{url_for('question_route', question_id=question['id'])}}">{{question['title']}}</a></h3></td></tr>
         {% endfor %}
