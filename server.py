@@ -41,6 +41,10 @@ def answer_route(question_id=None):
         return render_template('add-answer.html', question_id=question_id)
     else:
         msg = request.form['answer-msg']
+        id = request.form['id']
+        print(msg,id)
+        data_manager.add_new_answer(msg, id)
+        return redirect(url_for('question_route', question_id=question_id))
 
 
 if __name__ == '__main__':
