@@ -68,7 +68,7 @@ def add_new_answer(msg, id, img=None):
     answer_headers = connection.ANSWER_HEADERS
     answer = dict.fromkeys(answer_headers, 0)
 
-    answer['id'] = find_max_id('sample_data/answer.csv')
+    answer['id'] = find_max_id('sample_data/answer.csv') + 1
     answer['submission_time'] = int(time())
     answer['message'] = msg
     answer['image'] = img
