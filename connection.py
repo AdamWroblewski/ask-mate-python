@@ -16,8 +16,8 @@ def read_csv_data(file_name):
     return post_list
 
 
-def append_csv_data(file_name, data):
+def append_csv_data(file_name, data, fieldnames):
     with open(file_name, 'a') as file:
-        writer = csv.DictWriter(file, fieldnames=QUESTION_HEADERS)
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
 
         writer.writerow(data)
