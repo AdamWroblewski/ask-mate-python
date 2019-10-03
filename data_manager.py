@@ -1,6 +1,7 @@
 import connection
 import util
 from time import time
+from operator import itemgetter
 
 
 def get_post_title():
@@ -32,13 +33,16 @@ def get_question_by_id(question_id):
             return post
 
 
-def get_all_answers():
+def get_all_sorted_answers():
     answers = connection.read_csv_data('sample_data/answer.csv')
     for answer in answers:
         try:
             util.conver_to_int(answer, 'id', 'submission_time', 'vote_number', 'question_id')
         except (ValueError, KeyError):
             return None
+
+    answers = sorted(answers, key=itemgetter('submission_time'))
+    for answer in answers:
         answer['submission_time'] = util.convert_timestamp_to_date(answer['submission_time'])
 
     return answers
