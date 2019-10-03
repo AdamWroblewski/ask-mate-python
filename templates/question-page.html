@@ -24,7 +24,7 @@
         {% for answer in answers %}
             {% if answer['question_id'] == post['id'] %}
                 <div><span>{{answer['submission_time']}}</span>{{answer['vote_number']}}</div>
-                    <div>{{answer['message']}}</div>
+                    <div>{{answer['message']|replace("\n", "<br>")|safe}}</div>
                     <div>{{answer['image']}}</div>
             {% endif %}
         {% endfor %}
