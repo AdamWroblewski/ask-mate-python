@@ -21,7 +21,7 @@ def question_route(question_id):
     post = data_manager.get_question_by_id(question_id)
     post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
     answers = data_manager.get_all_answers()
-    return render_template('question-page.html', post=post, answers=answers)
+    return render_template('question-page.html', post=post, answers=answers, question_id=question_id)
 
 
 @app.route('/add-question', methods=['POST', 'GET'])
@@ -32,8 +32,15 @@ def add_question_route():
         title = escape(request.form['title'])
         msg = escape(request.form['message'])
         question_id = data_manager.add_new_question(title, msg)
-        print(msg)
         return redirect(url_for('question_route', question_id=question_id))
+
+
+@app.route('/question/<int:question_id>/new-answer', methods=['POST', 'GET'])
+def answer_route(question_id=None):
+    if request.method == 'GET':
+        return render_template('add-answer.html', question_id=question_id)
+    else:
+        msg = request.form['answer-msg']
 
 
 if __name__ == '__main__':
