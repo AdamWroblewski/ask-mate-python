@@ -20,7 +20,8 @@ def question_route(question_id):
         return redirect('/')
     post = data_manager.get_question_by_id(question_id)
     post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
-    return render_template('question-page.html', post=post)
+    answers = data_manager.get_all_answers()
+    return render_template('question-page.html', post=post, answers=answers)
 
 
 if __name__ == '__main__':
