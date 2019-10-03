@@ -10,7 +10,9 @@
             <div><span class="title">{{post['title']}}</span>, <span>votes: {{post['vote_number']}}</span></div>
             <div>{{post['submission_time']}}</div>
         </div>
-        <div>{{post['message']}}</div>
+        <div>
+            {{post['message']|replace("\n", "<br>")|safe}}
+        </div>
         {% if post['image'] %}
             <img src="{{url_for('static', filename=post['image'])}}">
         {% endif %}
