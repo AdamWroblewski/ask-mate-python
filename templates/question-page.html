@@ -7,7 +7,7 @@
 <body>
     <div>
         <div>
-            <div><span style="font-size: 2em">{{post['title']}}</span>, votes: {{post['vote_number']}}</div>
+            <div><span class="title">{{post['title']}}</span>, <span>votes: {{post['vote_number']}}</span></div>
             <div>{{post['submission_time']}}</div>
         </div>
         <div>{{post['message']}}</div>
@@ -15,6 +15,15 @@
             <img src="{{url_for('static', filename=post['image'])}}">
         {% endif %}
         <div>{{post['view_number']}}</div>
+    </div>
+    <div>
+        {% for answer in answers %}
+            {% if answer['question_id'] == post['id'] %}
+                <div><span>{{answer['submission_time']}}</span>{{answer['vote_number']}}</div>
+                    <div>{{answer['message']}}</div>
+                    <div>{{answer['image']}}</div>
+            {% endif %}
+        {% endfor %}
     </div>
 </body>
 </html>
