@@ -39,19 +39,20 @@ def get_all_answers():
             util.conver_to_int(answer, 'id', 'submission_time', 'vote_number', 'question_id')
         except (ValueError, KeyError):
             return None
+        answer['submission_time'] = util.convert_timestamp_to_date(answer['submission_time'])
 
     return answers
 
 
-def find_max_question_id():
-    questions = connection.read_csv_data('sample_data/question.csv')
+def find_max_id(file_name):
+    questions = connection.read_csv_data(file_name)
     return int(questions[-1]['id'])
 
 
 def add_new_question(title, msg, img=None):
     question = dict.fromkeys(connection.QUESTION_HEADERS, 0)
 
-    question['id'] = find_max_question_id() + 1
+    question['id'] = find_max_id('sample_data/question.csv') + 1
     question['submission_time'] = int(time())
     question['image'] = img
     question['title'] = title
@@ -60,3 +61,13 @@ def add_new_question(title, msg, img=None):
     connection.append_csv_data('sample_data/question.csv', question)
 
     return question['id']
+
+
+def add_new_answer(msg, id, img=None):
+    answer = dict.fromkeys(connection.ANSWER_HEADERS, 0)
+
+    answer['id'] = find_max_id('sample_data/answer.csv')
+    answer['submission_time'] = int(time())
+    answer['message'] = msg
+    answer['image'] = img
+    answer['question_id'] = id
