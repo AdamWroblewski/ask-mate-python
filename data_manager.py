@@ -42,8 +42,6 @@ def get_all_sorted_answers():
             return None
 
     answers = sorted(answers, key=itemgetter('submission_time'))
-    for answer in answers:
-        answer['submission_time'] = util.convert_timestamp_to_date(answer['submission_time'])
 
     return answers
 
