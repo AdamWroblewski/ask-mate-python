@@ -21,6 +21,8 @@ def question_route(question_id):
     post = data_manager.get_question_by_id(question_id)
     post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
     answers = data_manager.get_all_sorted_answers()
+    for answer in answers:
+        answer['submission_time'] = util.convert_timestamp_to_date(answer['submission_time'])
     return render_template('question-page.html', post=post, answers=answers, question_id=question_id)
 
 
@@ -40,8 +42,8 @@ def answer_route(question_id=None):
     if request.method == 'GET':
         return render_template('add-answer.html', question_id=question_id)
     else:
-        msg = request.form['answer-msg']
-        id = request.form['id']
+        msg = escape(request.form['answer-msg'])
+        id = escape(request.form['id'])
         data_manager.add_new_answer(msg, id)
         return redirect(url_for('question_route', question_id=question_id))
 
