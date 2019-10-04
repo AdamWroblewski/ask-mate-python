@@ -9,7 +9,7 @@
         <h1><a href="{{url_for('list_route')}}">Back to question list</a></h1>
         <h1><a href="{{url_for('answer_route', question_id=question_id)}}">Add answer</a></h1>
         <div>
-            <div><span class="title">{{post['title']}}</span>, <span>votes: {{post['vote_number']}}</span></div>
+            <div><span class="title">{{post['title']}}</span>, <span><br> votes: {{post['vote_number']}}</span></div>
             <div>{{post['submission_time']}}</div>
         </div>
         <div>
@@ -18,14 +18,14 @@
         {% if post['image'] %}
             <img src="{{url_for('static', filename=post['image'])}}">
         {% endif %}
-        <div>{{post['view_number']}}</div>
+        <div>{{post['view_number']}}</div><br>
     </div>
     <div>
         {% for answer in answers %}
             {% if answer['question_id'] == post['id'] %}
-                <div><span>{{answer['submission_time']}}</span>{{answer['vote_number']}}</div>
+                <div><span>{{answer['submission_time']}}</span><br> votes: {{answer['vote_number']}}</div>
                     <div>{{answer['message']|replace("\n", "<br>")|safe}}</div>
-                    <div>{{answer['image']}}</div>
+                    <div>{{answer['image']}}</div><br>
             {% endif %}
         {% endfor %}
     </div>
