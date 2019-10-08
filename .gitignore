@@ -107,3 +107,4 @@ sample_data/
 sample_data/question.csv
 sample_data/answer.csv
 requirements.txt
+setenv.sh
