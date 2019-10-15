@@ -68,7 +68,7 @@ def get_column_headers(cursor, table_header):
 
 
 @connection.connection_handler
-def add_new_question(cursor, message, title, img=None):
+def add_new_question(cursor, title, message, img=None):
 
     sql_query = """INSERT INTO 
                     question (submission_time, view_number, vote_number, title, message, image)
@@ -87,3 +87,19 @@ def add_new_answer(cursor, message, question_id, img=None):
                 """
 
     cursor.execute(sql_query, (question_id, message, img))
+
+
+@connection.connection_handler
+def get_question_ids(cursor):
+
+    cursor.execute("""
+                SELECT id FROM question
+                """)
+
+    question_ids = cursor.fetchall()
+    ids_list = []
+    
+    for dict in question_ids:
+        ids_list.append(dict['id'])
+
+    return ids_list
