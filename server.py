@@ -15,7 +15,9 @@ def list_route():
 @app.route('/question', defaults={'question_id': None})
 @app.route('/question/<int:question_id>')
 def question_route(question_id):
-    if question_id is None:
+    exsiting_ids = data_manager.get_question_ids()
+    print(exsiting_ids, question_id)
+    if question_id not in exsiting_ids:
         return redirect('/')
 
     post = data_manager.get_question_by_id(question_id)
