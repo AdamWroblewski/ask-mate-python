@@ -43,6 +43,7 @@ def get_all_sorted_answers(cursor, question_id):
     cursor.execute(sql.SQL("""
                             SELECT * FROM answer
                             WHERE question_id = question_id
+                            ORDER BY submission_time
                            """).format(question_id=sql.Literal(question_id)))
 
     answers_dict = cursor.fetchall()
