@@ -1,8 +1,8 @@
-import connection
-import util
 from time import time
-from operator import itemgetter
+
 from psycopg2 import sql
+
+import connection
 
 
 def get_post_title():
@@ -17,7 +17,6 @@ def get_post_title():
 
 @connection.connection_handler
 def get_all_questions(cursor):
-    
     cursor.execute("""
                     SELECT * FROM question
                     ORDER BY submission_time;
@@ -29,27 +28,25 @@ def get_all_questions(cursor):
 
 @connection.connection_handler
 def get_question_by_id(cursor, question_id):
-
     cursor.execute("""
                             SELECT * FROM question
                             WHERE id = %(question_id)s
                            """, {'question_id': question_id})
-    answer_dict = cursor.fetchall()
-    print(answer_dict)
-    return answer_dict
+    question_dict = cursor.fetchall()
+
+    return question_dict
 
 
-def get_all_sorted_answers():
-    answers = connection.read_csv_data('sample_data/answer.csv')
-    for answer in answers:
-        try:
-            util.conver_to_int(answer, 'id', 'submission_time', 'vote_number', 'question_id')
-        except (ValueError, KeyError):
-            return None
+@connection.connection_handler
+def get_all_sorted_answers(cursor, question_id):
 
-    answers = sorted(answers, key=itemgetter('submission_time'))
+    cursor.execute(sql.SQL("""
+                            SELECT * FROM answer
+                            WHERE question_id = question_id
+                           """).format(question_id=sql.Literal(question_id)))
 
-    return answers
+    answers_dict = cursor.fetchall()
+    return answers_dict
 
 
 def find_max_id(file_name):
