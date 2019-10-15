@@ -2,6 +2,7 @@ import connection
 import util
 from time import time
 from operator import itemgetter
+from psycopg2 import sql
 
 
 def get_post_title():
@@ -14,23 +15,28 @@ def get_post_title():
     return titles
 
 
-def get_all_questions():
-    posts = connection.read_csv_data('sample_data/question.csv')
-    for post in posts:
-        try:
-            util.conver_to_int(post, 'id', 'submission_time', 'view_number', 'vote_number')
-        except (ValueError, KeyError):
-            return None
+@connection.connection_handler
+def get_all_questions(cursor):
+    
+    cursor.execute("""
+                    SELECT * FROM question
+                    ORDER BY submission_time;
+                   """)
 
-    return posts
+    title_dict = cursor.fetchall()
+    return title_dict
 
 
-def get_question_by_id(question_id):
-    posts = get_all_questions()
+@connection.connection_handler
+def get_question_by_id(cursor, question_id):
 
-    for post in posts:
-        if post['id'] == question_id:
-            return post
+    cursor.execute("""
+                            SELECT * FROM question
+                            WHERE id = %(question_id)s
+                           """, {'question_id': question_id})
+    answer_dict = cursor.fetchall()
+    print(answer_dict)
+    return answer_dict
 
 
 def get_all_sorted_answers():
