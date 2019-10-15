@@ -1,22 +1,11 @@
-from time import time
-
 from psycopg2 import sql
 
 import connection
 
 
-def get_post_title():
-    posts = get_all_questions()
-
-    titles = []
-    for post in posts:
-        titles.append(post['title'])
-
-    return titles
-
-
 @connection.connection_handler
 def get_all_questions(cursor):
+
     cursor.execute("""
                     SELECT * FROM question
                     ORDER BY submission_time;
@@ -28,6 +17,7 @@ def get_all_questions(cursor):
 
 @connection.connection_handler
 def get_question_by_id(cursor, question_id):
+
     cursor.execute("""
                             SELECT * FROM question
                             WHERE id = %(question_id)s
@@ -47,37 +37,53 @@ def get_all_sorted_answers(cursor, question_id):
                            """).format(question_id=sql.Literal(question_id)))
 
     answers_dict = cursor.fetchall()
+
     return answers_dict
 
 
-def find_max_id(file_name):
-    questions = connection.read_csv_data(file_name)
-    return int(questions[-1]['id'])
+@connection.connection_handler
+def find_max_id(cursor):
+
+    cursor.execute("""
+                SELECT max(id) FROM question
+                """)
+
+    DICT_INDEX_WITH_PARAMETER = 0
+    newest_id_question = cursor.fetchall()
+
+    return newest_id_question[DICT_INDEX_WITH_PARAMETER]['max']
+
+@connection.connection_handler
+def get_column_headers(cursor, table_header):
+
+    cursor.execute("""
+                    SELECT column_name
+                    FROM INFORMATION_SCHEMA.COLUMNS
+                    WHERE TABLE_NAME = table_header 
+                   """).format(table_header=sql.Literal(table_header))
+
+    table_header_dict = cursor.fetchall()
+
+    return table_header_dict
 
 
-def add_new_question(title, msg, img=None):
-    question_headers = connection.QUESTION_HEADERS
-    question = dict.fromkeys(question_headers, 0)
+@connection.connection_handler
+def add_new_question(cursor, message, title, img=None):
 
-    question['id'] = find_max_id('sample_data/question.csv') + 1
-    question['submission_time'] = int(time())
-    question['image'] = img
-    question['title'] = title
-    question['message'] = msg
+    sql_query = """INSERT INTO 
+                    question (submission_time, view_number, vote_number, title, message, image)
+                    VALUES (now(), 0, 0, %s, %s, %s)"""
 
-    connection.append_csv_data('sample_data/question.csv', question, question_headers)
-
-    return question['id']
+    cursor.execute(sql_query, (title, message, img))
 
 
-def add_new_answer(msg, id, img=None):
-    answer_headers = connection.ANSWER_HEADERS
-    answer = dict.fromkeys(answer_headers, 0)
+@connection.connection_handler
+def add_new_answer(cursor, message, question_id, img=None):
 
-    answer['id'] = find_max_id('sample_data/answer.csv') + 1
-    answer['submission_time'] = int(time())
-    answer['message'] = msg
-    answer['image'] = img
-    answer['question_id'] = id
+    sql_query = """
+                INSERT INTO
+                answer (submission_time, vote_number, question_id, message, image)
+                VALUES (now(), 0, %s, %s, %s)
+                """
 
-    connection.append_csv_data('sample_data/answer.csv', answer, answer_headers)
+    cursor.execute(sql_query, (question_id, message, img))
