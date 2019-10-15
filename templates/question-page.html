@@ -18,7 +18,7 @@
         {% if post['image'] %}
             <img src="{{url_for('static', filename=post['image'])}}">
         {% endif %}
-        <div>{{post['view_number']}}</div><br>
+        <div>views: {{post['view_number']}}</div><br>
     </div>
     <div>
         {% for answer in answers %}
