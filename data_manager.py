@@ -98,7 +98,7 @@ def get_question_ids(cursor):
 
     question_ids = cursor.fetchall()
     ids_list = []
-    
+
     for dict in question_ids:
         ids_list.append(dict['id'])
 
