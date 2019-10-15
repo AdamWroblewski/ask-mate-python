@@ -20,10 +20,8 @@ def question_route(question_id):
 
     post = data_manager.get_question_by_id(question_id)
     post_data = 0
-    # post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
     answers = data_manager.get_all_sorted_answers(question_id)
-    # for answer in answers:
-    #     answer['submission_time'] = util.convert_timestamp_to_date(answer['submission_time'])
+
     return render_template('question-page.html', post=post[post_data], answers=answers, question_id=question_id)
 
 
@@ -34,7 +32,8 @@ def add_question_route():
     else:
         title = escape(request.form['title'])
         msg = escape(request.form['message'])
-        question_id = data_manager.add_new_question(title, msg)
+        data_manager.add_new_question(title, msg)
+        question_id = data_manager.find_max_id()
         return redirect(url_for('question_route', question_id=question_id))
 
 
@@ -44,8 +43,8 @@ def answer_route(question_id=None):
         return render_template('add-answer.html', question_id=question_id)
     else:
         msg = escape(request.form['answer-msg'])
-        id = escape(request.form['id'])
-        data_manager.add_new_answer(msg, id)
+        quest_id = escape(request.form['id'])
+        data_manager.add_new_answer(msg, quest_id)
         return redirect(url_for('question_route', question_id=question_id))
 
 
