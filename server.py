@@ -9,8 +9,7 @@ app = Flask(__name__)
 @app.route('/list')
 def list_route():
     questions = data_manager.get_all_questions()
-    sorted_titles = util.sort_by_time_submission(questions)
-    return render_template('list-questions.html', questions=sorted_titles)
+    return render_template('list-questions.html', questions=questions)
 
 
 @app.route('/question', defaults={'question_id': None})
@@ -18,12 +17,14 @@ def list_route():
 def question_route(question_id):
     if question_id is None:
         return redirect('/')
+
     post = data_manager.get_question_by_id(question_id)
-    post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
+    post_data = 0
+    # post['submission_time'] = util.convert_timestamp_to_date(post['submission_time'])
     answers = data_manager.get_all_sorted_answers()
-    for answer in answers:
-        answer['submission_time'] = util.convert_timestamp_to_date(answer['submission_time'])
-    return render_template('question-page.html', post=post, answers=answers, question_id=question_id)
+    # for answer in answers:
+    #     answer['submission_time'] = util.convert_timestamp_to_date(answer['submission_time'])
+    return render_template('question-page.html', post=post[post_data], answers=answers, question_id=question_id)
 
 
 @app.route('/add-question', methods=['POST', 'GET'])
