@@ -13,7 +13,7 @@
             <div><span class="title">{{post['title']}}</span>, <span><br> votes: {{post['vote_number']}}</span></div>
             <div class="right">{{post['submission_time']}}</div>
         </div>
-        <div>
+        <div class="message">
             {{post['message']|replace("\n", "<br>")|safe}}
         </div>
         {% if post['image'] %}
@@ -33,8 +33,8 @@
     <div>
         {% for answer in answers %}
             {% if answer['question_id'] == post['id'] %}
-                <div><span>{{answer['submission_time']}}</span><br> votes: {{answer['vote_number']}}</div>
-                    <div>{{answer['message']|replace("\n", "<br>")|safe}}</div>
+                <div class="answer_head"><span>{{answer['submission_time']}}</span><br> votes: {{answer['vote_number']}}</div>
+                    <div class="message">{{answer['message']|replace("\n", "<br>")|safe}}</div>
                     {% if answer['image'] %}
                         <div>{{answer['image']}}</div><br>
                     {% endif %}
