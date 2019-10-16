@@ -53,6 +53,7 @@ def find_max_id(cursor):
 
     return newest_id_question[DICT_INDEX_WITH_PARAMETER]['max']
 
+
 @connection.connection_handler
 def get_column_headers(cursor, table_header):
 
@@ -103,3 +104,15 @@ def get_question_ids(cursor):
         ids_list.append(dict['id'])
 
     return ids_list
+
+
+@connection.connection_handler
+def insert_question_comment(cursor, question_id, message):
+
+    sql_query = """
+                INSERT INTO
+                comment (question_id, message, submission_time, edited_count)
+                VALUES (%s, %s, date_trunc('second', now()), 0)
+                """
+
+    cursor.execute(sql_query, (question_id, message))
