@@ -35,8 +35,11 @@ body {
 }
 
 .comment_box {
+    display: table;
     font-size: 0.8em;
-    margin: 8pt 1em 1em 4pt;
+    margin: 2pt 1em 1em 2pt;
+    padding: 0.5em;
+    border: 1px solid #DDD;
 }
 
 .answer_head {
