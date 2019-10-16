@@ -62,6 +62,11 @@ def question_comment_route(question_id=None):
         return redirect(url_for('question_route', question_id=question_id))
 
 
+@app.route('/answer/<answer_id>/new-comment', methods=['POST', 'GET'])
+def answer_question_route(answer_id=None):
+    return
+
+
 if __name__ == '__main__':
     app.run(
         debug=True,
