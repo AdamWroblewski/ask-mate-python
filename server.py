@@ -24,9 +24,10 @@ def question_route(question_id):
 
     answers_dict = data_manager.get_all_sorted_answers(question_id)
     id_tuple = data_manager.get_answers_ids(question_id)
+    if len(id_tuple) < 1:
+        id_tuple = (-1,)
     question_comments_dict = data_manager.get_question_comments(question_id)
     answer_commnets_dict = data_manager.get_answer_coments(id_tuple)
-    print(answers_dict)
 
     return render_template('question-page.html', post=post[post_data],
                            answers=answers_dict, question_id=question_id,
