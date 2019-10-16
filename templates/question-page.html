@@ -18,8 +18,9 @@
         {% if post['image'] %}
             <img src="{{url_for('static', filename=post['image'])}}">
         {% endif %}
-        <div>views: {{post['view_number']}}</div><br>
-    </div>
+        <div>views: {{post['view_number']}}</div>
+        <a href="{{url_for('question_comment_route', question_id=question_id)}}">Add new comment</a>
+    </div><br>
     <div>
         {% for answer in answers %}
             {% if answer['question_id'] == post['id'] %}
