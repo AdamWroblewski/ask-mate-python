@@ -2,3 +2,47 @@
     font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+body {
+    font-size: 14pt;
+}
+
+.question {
+    padding-left: 0.5em;
+    margin: 0.5em;
+    border-left: 1px solid #AAA;
+}
+
+.title_box div:first-child {
+    display: inline-block;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.right {
+    margin-left: 1em;
+    display: inline-block;
+    font-size: 0.8em;
+}
+
+.message {
+    padding: 1em;
+    margin: 0.5em;
+    border: 1px solid #DDD;
+    border-radius: 1em;
+    display: table;
+}
+
+.comment_box {
+    display: table;
+    font-size: 0.8em;
+    margin: 2pt 1em 1em 2pt;
+    padding: 0.5em;
+    border: 1px solid #DDD;
+}
+
+.answer_head {
+    font-size: 0.8em;
+}
+

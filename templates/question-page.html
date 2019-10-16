@@ -6,14 +6,14 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
-    <div>
+    <div class="question">
         <h1><a href="{{url_for('list_route')}}">Back to question list</a></h1>
         <h1><a href="{{url_for('answer_route', question_id=question_id)}}">Add answer</a></h1>
-        <div>
+        <div class="title_box">
             <div><span class="title">{{post['title']}}</span>, <span><br> votes: {{post['vote_number']}}</span></div>
-            <div>{{post['submission_time']}}</div>
+            <div class="right">{{post['submission_time']}}</div>
         </div>
-        <div>
+        <div class="message">
             {{post['message']|replace("\n", "<br>")|safe}}
         </div>
         {% if post['image'] %}
@@ -22,7 +22,7 @@
         <div>views: {{post['view_number']}}</div>
         {% if question_comments %}
             {% for question_comment in question_comments %}
-                <div>
+                <div class="comment_box">
                     <div>{{ question_comment['message'] }}</div>
                     <div>{{ question_comment['submission_time'] }}</div>
                 </div>
@@ -33,10 +33,10 @@
     <div>
         {% for answer in answers %}
             {% if answer['question_id'] == post['id'] %}
-                <div><span>{{answer['submission_time']}}</span><br> votes: {{answer['vote_number']}}</div>
-                <div>{{answer['message']|replace("\n", "<br>")|safe}}</div>
-                {% if answer['image'] %}
-                    <div>{{answer['image']}}</div>
+                <div class="answer_head"><span>{{answer['submission_time']}}</span><br> votes: {{answer['vote_number']}}</div>
+                    <div class="message">{{answer['message']|replace("\n", "<br>")|safe}}</div>
+                    {% if answer['image'] %}
+                        <div>{{answer['image']}}</div><br>
                 {% endif %}
                 {% for comment in answer_comments %}
                     <br>
