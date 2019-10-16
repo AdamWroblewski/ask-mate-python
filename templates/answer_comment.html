@@ -6,7 +6,7 @@
 </head>
 <body>
 
-    <form method="post" action="{{url_for('question_comment_route', answer_id=answer_id)}}">
+    <form method="post" action="{{url_for('answer_comment_route', answer_id=answer_id)}}">
         <input type="hidden" name="id" value="{{answer_id}}">
         <label for="comment-msg">Enter your comment: </label><br>
         <textarea id="comment-msg" cols="50" rows="40" name="comment-msg"></textarea><br>
