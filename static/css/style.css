@@ -2,3 +2,24 @@
     font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
+body {
+    font-size: 14pt;
+}
+
+.title_box div:first-child {
+    display: inline-block;
+}
+
+.title {
+    font-weight: bold;
+}
+
+.right {
+    display: inline-block;
+}
+
+.comment_box {
+    font-size: 0.8em;
+    margin: 8pt 1em 1em 4pt;
+}
+
