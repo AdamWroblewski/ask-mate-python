@@ -22,8 +22,11 @@ def question_route(question_id):
     post = data_manager.get_question_by_id(question_id)
     post_data = 0
     answers = data_manager.get_all_sorted_answers(question_id)
+    question_comments_dict = data_manager.get_question_comments(question_id)
 
-    return render_template('question-page.html', post=post[post_data], answers=answers, question_id=question_id)
+    return render_template('question-page.html', post=post[post_data],
+                           answers=answers, question_id=question_id,
+                           question_comments=question_comments_dict)
 
 
 @app.route('/add-question', methods=['POST', 'GET'])
