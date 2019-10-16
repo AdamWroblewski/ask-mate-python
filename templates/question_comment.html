@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ask mate: comment to question</title>
+</head>
+<body>
+
+    <form method="post" action="{{url_for('question_comment_route', question_id=question_id)}}">
+        <input type="hidden" name="id" value="{{question_id}}">
+        <label for="comment-msg">Enter your comment: </label><br>
+        <textarea id="comment-msg" cols="50" rows="40" name="comment-msg"></textarea><br>
+        <input type="submit" value="Add an comment">
+    </form>
+
+</body>
+</html>
