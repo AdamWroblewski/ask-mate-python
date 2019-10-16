@@ -29,24 +29,25 @@
             {% endfor %}
         {% endif %}
         <a href="{{url_for('question_comment_route', question_id=question_id)}}">Add new comment</a>
-    </div><br>
+    </div><br><br><br>
     <div>
         {% for answer in answers %}
             {% if answer['question_id'] == post['id'] %}
                 <div><span>{{answer['submission_time']}}</span><br> votes: {{answer['vote_number']}}</div>
-                    <div>{{answer['message']|replace("\n", "<br>")|safe}}</div>
-                    {% if answer['image'] %}
-                        <div>{{answer['image']}}</div><br>
+                <div>{{answer['message']|replace("\n", "<br>")|safe}}</div>
+                {% if answer['image'] %}
+                    <div>{{answer['image']}}</div>
+                {% endif %}
+                {% for comment in answer_comments %}
+                    <br>
+                    {% if comment['answer_id'] == answer['id'] %}
+                        {{comment['message']}}
+                        {{comment['submission_time']}}
                     {% endif %}
-            {% endif %}
-            {% if answer_comments %}
-                {% for answer_comment in answer_comments %}
-                    <div>
-                        <div>{{ answer_comments['message'] }}</div>
-                        <div>{{ answer_comments['submission_time'] }}</div>
-                    </div>
                 {% endfor %}
             {% endif %}
+            <a href="{{url_for('answer_comment_route', answer_id=answer['id'])}}">
+                Add new comment</a>
         {% endfor %}
     </div>
 </body>
