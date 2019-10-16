@@ -124,3 +124,41 @@ def get_question_comments(cursor, question_id):
 
     question_comment_dict = cursor.fetchall()
     return question_comment_dict
+
+
+@connection.connection_handler
+def insert_answer_comment(cursor, answer_id, message):
+
+    sql_query = """
+                INSERT INTO
+                comment (answer_id, message, submission_time, edited_count)
+                VALUES (%s, %s, date_trunc('second', now()), 0);
+                """
+
+    cursor.execute(sql_query, (answer_id, message))
+
+
+@connection.connection_handler
+def get_answer_coments(cursor, *args):
+
+    sql_query = """
+                select answer_id, c.message, c.submission_time from answer as a
+                right join "comment" as c
+                on a.id = c.question_id
+                where c.answer_id in %s;
+                """
+
+    cursor.execute(sql_query, args)
+    answer_comments_dict = cursor.fetchall()
+
+    return answer_comments_dict
+
+
+def get_answers_ids(question_id):
+    answers_dict = get_all_sorted_answers(question_id)
+
+    id_list = list()
+    for answer in answers_dict:
+        id_list.append(answer['id'])
+
+    return tuple(id_list)
