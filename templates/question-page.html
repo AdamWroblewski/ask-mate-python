@@ -38,6 +38,14 @@
                         <div>{{answer['image']}}</div><br>
                     {% endif %}
             {% endif %}
+            {% if answer_comments %}
+                {% for answer_comment in answer_comments %}
+                    <div>
+                        <div>{{ answer_comments['message'] }}</div>
+                        <div>{{ answer_comments['submission_time'] }}</div>
+                    </div>
+                {% endfor %}
+            {% endif %}
         {% endfor %}
     </div>
 </body>
