@@ -21,12 +21,17 @@ def question_route(question_id):
 
     post = data_manager.get_question_by_id(question_id)
     post_data = 0
-    answers = data_manager.get_all_sorted_answers(question_id)
+
+    answers_dict = data_manager.get_all_sorted_answers(question_id)
+    id_tuple = data_manager.get_answers_ids(question_id)
     question_comments_dict = data_manager.get_question_comments(question_id)
+    answer_commnets_dict = data_manager.get_answer_coments(id_tuple)
+    print(answers_dict)
 
     return render_template('question-page.html', post=post[post_data],
-                           answers=answers, question_id=question_id,
-                           question_comments=question_comments_dict)
+                           answers=answers_dict, question_id=question_id,
+                           question_comments=question_comments_dict,
+                           answer_comments=answer_commnets_dict)
 
 
 @app.route('/add-question', methods=['POST', 'GET'])
@@ -63,8 +68,12 @@ def question_comment_route(question_id=None):
 
 
 @app.route('/answer/<answer_id>/new-comment', methods=['POST', 'GET'])
-def answer_question_route(answer_id=None):
-    return
+def answer_comment_route(answer_id=None):
+    if request.method == 'GET':
+        return render_template('answer_comment.html', answer_id=answer_id)
+    else:
+        comment_message = request.form['comment-msg']
+        data_manager.insert_answer_comment(answer_id, comment_message)
 
 
 if __name__ == '__main__':
@@ -72,4 +81,3 @@ if __name__ == '__main__':
         debug=True,
         port=8000
     )
-
