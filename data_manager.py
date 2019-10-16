@@ -117,16 +117,10 @@ def insert_question_comment(cursor, question_id, message):
 @connection.connection_handler
 def get_question_comments(cursor, question_id):
 
-    # cursor.execute("""
-    #                 SELECT message, submission_time FROM comment
-    #                 WHERE question_id = %(question_id)s;
-    #                """, {'question_id': question_id})
-
-    cursor.execute(sql.SQL
-                   ("""
+    cursor.execute("""
                     SELECT message, submission_time FROM comment
-                    WHERE question_id = {question_id}
-                   """).format(question_id=sql.Literal(question_id)))
+                    WHERE question_id = %(question_id)s;
+                   """, {'question_id': question_id})
 
     question_comment_dict = cursor.fetchall()
     return question_comment_dict
