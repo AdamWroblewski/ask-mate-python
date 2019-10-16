@@ -19,6 +19,14 @@
             <img src="{{url_for('static', filename=post['image'])}}">
         {% endif %}
         <div>views: {{post['view_number']}}</div>
+        {% if question_comments %}
+            {% for question_comment in question_comments %}
+                <div>
+                    <div>{{ question_comment['message'] }}</div>
+                    <div>{{ question_comment['submission_time'] }}</div>
+                </div>
+            {% endfor %}
+        {% endif %}
         <a href="{{url_for('question_comment_route', question_id=question_id)}}">Add new comment</a>
     </div><br>
     <div>
