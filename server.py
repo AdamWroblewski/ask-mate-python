@@ -16,7 +16,6 @@ def list_route():
 @app.route('/question/<int:question_id>')
 def question_route(question_id):
     exsiting_ids = data_manager.get_question_ids()
-    print(exsiting_ids, question_id)
     if question_id not in exsiting_ids:
         return redirect('/')
 
@@ -47,6 +46,16 @@ def answer_route(question_id=None):
         msg = escape(request.form['answer-msg'])
         quest_id = escape(request.form['id'])
         data_manager.add_new_answer(msg, quest_id)
+        return redirect(url_for('question_route', question_id=question_id))
+
+
+@app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
+def question_comment_route(question_id=None):
+    if request.method == 'GET':
+        return render_template('question_comment.html', question_id=question_id)
+    else:
+        comment_message = request.form['comment-msg']
+        data_manager.insert_question_comment(question_id, comment_message)
         return redirect(url_for('question_route', question_id=question_id))
 
 
