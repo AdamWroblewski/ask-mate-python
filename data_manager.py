@@ -83,7 +83,7 @@ def add_new_answer(cursor, message, question_id, img=None):
     sql_query = """
                 INSERT INTO
                 answer (submission_time, vote_number, question_id, message, image)
-                VALUES (now(), 0, %s, %s, %s)
+                VALUES (date_trunc('second', now()), 0, %s, %s, %s)
                 """
 
     cursor.execute(sql_query, (question_id, message, img))
