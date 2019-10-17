@@ -76,6 +76,10 @@ def answer_comment_route(answer_id=None):
         comment_message = request.form['comment-msg']
         data_manager.insert_answer_comment(answer_id, comment_message)
 
+@app.errorhandler(404)
+def page_404(e):
+    return render_template('error_404_page.html'), 404
+#
 
 if __name__ == '__main__':
     app.run(
