@@ -86,10 +86,27 @@ def answer_comment_route(answer_id=None, question_id=None):
         return redirect(url_for('question_route', question_id=question_id))
 
 
+@app.route('/search')
+def search_route():
+    # for i in request.args:
+    #     print(i, request.args[i])
+    # print(request.args)
+    if 'q' not in request.args:
+        return render_template('error_404_page.html'), 404
+
+    search_phrase = request.args['q']
+    search_answer_resul_dict = data_manager.search_phrase_in_answer(search_phrase)
+    search_question_result_dict = data_manager.search_phrase_in_question(search_phrase)
+    print(search_phrase)
+
+    return render_template('search_results.html', phrase=search_phrase,
+                           search_answer_resul_dict=search_answer_resul_dict,
+                           search_question_result_dict=search_question_result_dict)
+
+
 @app.errorhandler(404)
 def page_404(e):
     return render_template('error_404_page.html'), 404
-#
 
 
 if __name__ == '__main__':
