@@ -45,7 +45,7 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            <a href="{{url_for('answer_comment_route', answer_id=answer['id'])}}">
+            <a href="{{url_for('answer_comment_route', answer_id=answer['id'], question_id=question_id)}}">
                 Add new comment</a>
         {% endfor %}
     </div>
