@@ -7,16 +7,16 @@
 </head>
 <body>
 <div class="main">
-  <div class="cell">
-	You are on the wrong page: <h1>404</h1>
-	<div class="message">
-	  We missed you<br/>
-	  <img src="{{ url_for('static', filename='images/image1.png') }}" alt="AWAS" />
-	</div><br />
-	<div class="message">
-	  <a href="{{ url_for('list_route') }}">Main page</a>
-	</div>
-  </div>
+    <div class="cell">
+        You are on the wrong page: <h1>404</h1>
+        <div class="message">
+            We missed you<br/>
+            <img src="{{ url_for('static', filename='images/awas_logo.jpg') }}" alt="AWAS" />
+        </div><br />
+        <div class="message">
+            <a href="{{ url_for('list_route') }}">Main page</a>
+        </div>
+    </div>
 </div>
 </body>
 </html>
