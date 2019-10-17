@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+    {% block content %}
+        <body>
+            {% if not (search_answer_resul_dict or search_question_result_dict)%}
+                <h3>Sorry, there is no results for your phrase.</h3>
+            <h3><a href="{{ url_for('list_route') }}">Back to main page.</a></h3>
+            {% else %}
+                <h3>Your results: </h3>
+                {% for post in search_question_result_dict %}
+                    <p><a href="{{ url_for('question_route', question_id=post['id']) }}">
+                        {{ post['title']|replace(phrase, '<strong>'+phrase+'</strong>')|safe }}
+                    </a></p>
+                    <p>{{ post['message']|replace(phrase, '<strong>'+phrase+'</strong>')|safe }}</p>
+                {% endfor %}
+                {% for post in search_answer_resul_dict %}
+                    <p><a href="{{ url_for('question_route', question_id=post['question_id']) }}">
+                        {{ post['title']|replace(phrase, '<strong>'+phrase+'</strong>')|safe }}
+                    </a></p>
+                    <p>{{ post['message']|replace(phrase, '<strong>'+phrase+'</strong>')|safe }}</p>
+                {% endfor %}
+            {% endif %}
+        </body>
+    {% endblock %}
