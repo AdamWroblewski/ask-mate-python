@@ -29,7 +29,7 @@
             {% endfor %}
         {% endif %}
         <a href="{{url_for('question_comment_route', question_id=question_id)}}">Add new comment</a>
-    </div><br><br><br>
+    </div>
     <div>
         {% for answer in answers %}
             {% if answer['question_id'] == post['id'] %}
@@ -39,7 +39,6 @@
                         <div>{{answer['image']}}</div><br>
                 {% endif %}
                 {% for comment in answer_comments %}
-                    <br>
                     {% if comment['answer_id'] == answer['id'] %}
                         {{comment['message']}}
                         {{comment['submission_time']}}
