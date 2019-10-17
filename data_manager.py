@@ -162,3 +162,30 @@ def get_answers_ids(question_id):
         id_list.append(answer['id'])
 
     return tuple(id_list)
+
+
+@connection.connection_handler
+def search_phrase_in_answer(cursor, phrase):
+
+    sql_query = """SELECT * FROM question as q
+                   JOIN answer as a ON a.question_id=q.id
+                   WHERE q.message LIKE %(phrase)s
+                   OR a.message LIKE %(phrase)s"""
+
+    cursor.execute(sql_query, {'phrase': f'%{phrase}%'})
+
+    result = cursor.fetchall()
+    return result
+
+
+@connection.connection_handler
+def search_phrase_in_question(cursor, phrase):
+
+    sql_query = """SELECT * FROM question
+                   WHERE title LIKE %(phrase)s
+                   OR message LIKE %(phrase)s"""
+
+    cursor.execute(sql_query, {'phrase': f'%{phrase}%'})
+
+    result = cursor.fetchall()
+    return result
