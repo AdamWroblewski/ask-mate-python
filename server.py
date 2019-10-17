@@ -24,8 +24,10 @@ def question_route(question_id):
 
     answers_dict = data_manager.get_all_sorted_answers(question_id)
     id_tuple = data_manager.get_answers_ids(question_id)
+
     if len(id_tuple) < 1:
         id_tuple = (-1,)
+
     question_comments_dict = data_manager.get_question_comments(question_id)
     answer_commnets_dict = data_manager.get_answer_coments(id_tuple)
 
@@ -68,13 +70,15 @@ def question_comment_route(question_id=None):
         return redirect(url_for('question_route', question_id=question_id))
 
 
-@app.route('/answer/<answer_id>/new-comment', methods=['POST', 'GET'])
-def answer_comment_route(answer_id=None):
+@app.route('/answer/<question_id>/<answer_id>/new-comment', methods=['POST', 'GET'])
+def answer_comment_route(answer_id=None, question_id=None):
     if request.method == 'GET':
-        return render_template('answer_comment.html', answer_id=answer_id)
+        return render_template('answer_comment.html', answer_id=answer_id, question_id=question_id)
     else:
+        question_id = request.form['question_id']
         comment_message = request.form['comment-msg']
         data_manager.insert_answer_comment(answer_id, comment_message)
+        return redirect(url_for('question_route', question_id=question_id))
 
 @app.errorhandler(404)
 def page_404(e):
