@@ -8,8 +8,9 @@ app = Flask(__name__)
 @app.route('/')
 @app.route('/list')
 def list_route():
+    title = 'Ask mate'
     questions = data_manager.get_all_questions()
-    return render_template('list-questions.html', questions=questions)
+    return render_template('list_question.html', questions=questions, title=title)
 
 
 @app.route('/question', defaults={'question_id': None})
@@ -31,7 +32,7 @@ def question_route(question_id):
     question_comments_dict = data_manager.get_question_comments(question_id)
     answer_commnets_dict = data_manager.get_answer_coments(id_tuple)
 
-    return render_template('question-page.html', post=post[post_data],
+    return render_template('question_page.html', post=post[post_data],
                            answers=answers_dict, question_id=question_id,
                            question_comments=question_comments_dict,
                            answer_comments=answer_commnets_dict)
@@ -40,7 +41,7 @@ def question_route(question_id):
 @app.route('/add-question', methods=['POST', 'GET'])
 def add_question_route():
     if request.method == 'GET':
-        return render_template('question-edit-page.html')
+        return render_template('ask_question.html')
     else:
         title = escape(request.form['title'])
         msg = escape(request.form['message'])
@@ -52,7 +53,8 @@ def add_question_route():
 @app.route('/question/<int:question_id>/new-answer', methods=['POST', 'GET'])
 def answer_route(question_id=None):
     if request.method == 'GET':
-        return render_template('add-answer.html', question_id=question_id)
+        title = 'Add answer - Ask mate'
+        return render_template('add_answer.html', question_id=question_id, title=title)
     else:
         msg = escape(request.form['answer-msg'])
         quest_id = escape(request.form['id'])
@@ -63,7 +65,8 @@ def answer_route(question_id=None):
 @app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
 def question_comment_route(question_id=None):
     if request.method == 'GET':
-        return render_template('question_comment.html', question_id=question_id)
+        title = 'Add coment to question - Ask mate'
+        return render_template('question_comment.html', question_id=question_id, title=title)
     else:
         comment_message = request.form['comment-msg']
         data_manager.insert_question_comment(question_id, comment_message)
@@ -73,17 +76,21 @@ def question_comment_route(question_id=None):
 @app.route('/answer/<question_id>/<answer_id>/new-comment', methods=['POST', 'GET'])
 def answer_comment_route(answer_id=None, question_id=None):
     if request.method == 'GET':
-        return render_template('answer_comment.html', answer_id=answer_id, question_id=question_id)
+        title = 'Add coment to answer - Ask mate'
+        return render_template('answer_comment.html', answer_id=answer_id,
+                               question_id=question_id, title=title)
     else:
         question_id = request.form['question_id']
         comment_message = request.form['comment-msg']
         data_manager.insert_answer_comment(answer_id, comment_message)
         return redirect(url_for('question_route', question_id=question_id))
 
+
 @app.errorhandler(404)
 def page_404(e):
     return render_template('error_404_page.html'), 404
 #
+
 
 if __name__ == '__main__':
     app.run(

@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+    {% block content %}
+        <form method="post" action="{{url_for('answer_route', question_id=question_id)}}">
+            <input type="hidden" name="id" value="{{question_id}}">
+            <label for="answer-msg">Enter your answer: </label><br>
+            <textarea id="answer-msg" cols="50" rows="40" name="answer-msg"></textarea><br>
+            <input type="submit" value="Add an answer">
+        </form>
+    {% endblock %}
