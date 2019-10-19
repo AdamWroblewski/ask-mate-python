@@ -10,7 +10,9 @@ app = Flask(__name__)
 def list_route():
     title = 'Ask mate'
     questions = data_manager.get_all_questions()
-    return render_template('list_question.html', questions=questions, title=title)
+    return render_template('list_question.html',
+                           questions=questions,
+                           title=title)
 
 
 @app.route('/question', defaults={'question_id': None})
@@ -97,7 +99,6 @@ def search_route():
     search_phrase = request.args['q']
     search_answer_resul_dict = data_manager.search_phrase_in_answer(search_phrase)
     search_question_result_dict = data_manager.search_phrase_in_question(search_phrase)
-    print(search_phrase)
 
     return render_template('search_results.html', phrase=search_phrase,
                            search_answer_resul_dict=search_answer_resul_dict,
