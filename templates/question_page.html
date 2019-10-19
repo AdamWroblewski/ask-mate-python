@@ -33,10 +33,12 @@
                             <div>{{answer['image']}}</div><br>
                     {% endif %}
                     {% for comment in answer_comments %}
+                        <div style="margin-left: 3em">
                         {% if comment['answer_id'] == answer['id'] %}
                             {{comment['message']}}
                             {{comment['submission_time']}}
                         {% endif %}
+                        </div>
                     {% endfor %}
                 {% endif %}
                 <a href="{{url_for('answer_comment_route', answer_id=answer['id'], question_id=question_id)}}">
