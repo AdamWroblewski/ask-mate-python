@@ -3,11 +3,9 @@
         <h1>Fill new user data</h1>
         <form action="{{ url_for('register_route') }}" method="post">
             <label for="login">Login: </label>
-            <input id="login" type="text" name="login"><br>
+            <input id="login" type="text" name="login" required><br>
             <label for="password">Password: </label>
-            <input id="password" type="password" name="password"><br>
-            <label for="mail">Mail: </label>
-            <input id="mail" type="text" name="mail"><br>
+            <input id="password" type="password" name="password" required><br>
             <input type="submit" value="Register user">
         </form>
     {% endblock %}
