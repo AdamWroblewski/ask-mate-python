@@ -1,18 +1,12 @@
-from operator import itemgetter
-from datetime import datetime
+import bcrypt
 
 
-def sort_by_time_submission(posts):
-    return sorted(posts, key=itemgetter('submission_time'), reverse=True)
+def hash_password(plain_text_password):
+
+    hashed_bytes = bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return hashed_bytes.decode('utf-8')
 
 
-def convert_timestamp_to_date(timestamp):
-    return datetime.fromtimestamp(timestamp)
-
-
-def conver_to_int(dictionary, *args):
-    for arg in args:
-        if arg not in dictionary.keys():
-            raise KeyError('Wrong key.')
-        dictionary[arg] = int(dictionary[arg])
-
+def verify_password(plain_text_password, hashed_password):
+    hashed_bytes_password = hashed_password.encode('utf-8')
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_bytes_password)
