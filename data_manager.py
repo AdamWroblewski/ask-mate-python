@@ -1,5 +1,4 @@
 from psycopg2 import sql
-
 import connection
 
 
@@ -189,3 +188,14 @@ def search_phrase_in_question(cursor, phrase):
 
     result = cursor.fetchall()
     return result
+
+
+@connection.connection_handler
+def save_user_data(cursor, login, password):
+
+    sql_query = """
+                INSERT INTO ask_mate_users
+                VALUES (default, default, %(login)s, %(password)s, 'mail', 0)
+                """
+
+    cursor.execute(sql_query, {'login': login, 'password': password})
