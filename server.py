@@ -105,6 +105,18 @@ def search_route():
                            search_question_result_dict=search_question_result_dict)
 
 
+@app.route('/register', methods=['POST', 'GET'])
+def register_route():
+    if request.method == 'GET':
+        title = 'Register user - Ask mate'
+        return render_template('registration.html', title=title)
+    else:
+        login = request.form['login']
+        password = util.hash_password(request.form['password'])
+        data_manager.save_user_data(login, password)
+        return redirect(url_for('list_route'))
+
+
 @app.errorhandler(404)
 def page_404(e):
     return render_template('error_404_page.html'), 404
