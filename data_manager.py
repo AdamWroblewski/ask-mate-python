@@ -183,3 +183,18 @@ def save_user_data(cursor, login, password):
                 """
 
     cursor.execute(sql_query, {'login': login, 'password': password})
+
+
+@connection.connection_handler
+def get_user_login_data(cursor, login):
+
+    sql_query = """
+                SELECT name, password from ask_mate_users
+                WHERE name=%(login)s
+                """
+
+    cursor.execute(sql_query, {'login': login})
+    user_data = cursor.fetchall()
+    print(user_data)
+
+    return user_data
