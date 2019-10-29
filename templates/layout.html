@@ -6,7 +6,8 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
-    <a href="{{ url_for('register_route') }}">Register new user</a>
+    <a class="user" href="{{ url_for('register_route') }}">Register new user</a>
+    <a class="user" href="{{ url_for('login_route') }}">Log in</a><br>
     {% block content %}{% endblock %}
 </body>
 </html>
