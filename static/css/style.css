@@ -16,6 +16,10 @@ body {
     display: inline-block;
 }
 
+.title_box img {
+    height: 2em;
+}
+
 .title {
     font-weight: bold;
 }
@@ -49,3 +53,8 @@ body {
 strong{
     color: red;
 }
+
+.clear2 {
+    clear: both;
+}
+
