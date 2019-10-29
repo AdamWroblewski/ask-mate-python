@@ -16,7 +16,7 @@ body {
     display: inline-block;
 }
 
-.title_box img {
+img.thumb {
     height: 2em;
 }
 
