@@ -7,9 +7,9 @@
                 <div>
                     <span class="title">{{post['title']}}</span>, 
                     <div>votes:
-                        <a href="#"><img class="thumb" src="{{ url_for('static', filename='images/vote_up.png') }}" /></a>
+                        <a href="{{ url_for('vote_up_question', question_id=question_id) }}"><img class="thumb" src="{{ url_for('static', filename='images/vote_up.png') }}" /></a>
                         {{post['vote_number']}}
-                        <a href="#"><img class="thumb" src="{{ url_for('static', filename='images/vote_down.png') }}" /></a>
+                        <a href="{{ url_for('vote_down_question', question_id=question_id) }}"><img class="thumb" src="{{ url_for('static', filename='images/vote_down.png') }}" /></a>
                     </div>
                 </div>
                 <div class="right">{{post['submission_time']}}</div>
@@ -36,9 +36,9 @@
                 {% if answer['question_id'] == post['id'] %}
                     <div class="answer_head">
                         <span>{{answer['submission_time']}}</span><br> votes
-                        <a href="#"><img class="thumb" src="{{ url_for('static', filename='images/vote_up.png') }}" /></a>
+                        <a href="{{ url_for('vote_up_answer', answer_id=answer['id']) }}"><img class="thumb" src="{{ url_for('static', filename='images/vote_up.png') }}" /></a>
                         {{answer['vote_number']}}
-                        <a href="#"><img class="thumb" src="{{ url_for('static', filename='images/vote_down.png') }}" /></a>
+                        <a href="{{ url_for('vote_down_answer', answer_id=answer['id']) }}"><img class="thumb" src="{{ url_for('static', filename='images/vote_down.png') }}" /></a>
                     </div>
                         <div class="message">{{answer['message']|replace("\n", "<br>")|safe}}</div>
                         {% if answer['image'] %}
