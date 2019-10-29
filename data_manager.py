@@ -84,6 +84,12 @@ def get_question_ids(cursor):
 
     return ids_list
 
+@connection.connection_handler
+def get_question_by_answer_id(cursor, answer_id):
+    cursor.execute("SELECT question_id FROM answer WHERE id = %{answer_id}s", {'answer_id': answer_id})
+    question_id = cursor.fetchall()
+    return quest_id
+#
 
 @connection.connection_handler
 def insert_question_comment(cursor, question_id, message):
