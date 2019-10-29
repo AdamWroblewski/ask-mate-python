@@ -1,9 +1,11 @@
-from flask import Flask, escape, render_template, request, redirect, url_for, make_response
+from flask import Flask, escape, render_template, request, redirect, url_for, session
 import data_manager
 from psycopg2 import ProgrammingError
 import util
+import os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 
 @app.route('/')
@@ -45,7 +47,10 @@ def question_route(question_id):
 @app.route('/add-question', methods=['POST', 'GET'])
 def add_question_route():
     if request.method == 'GET':
-        return render_template('ask_question.html')
+        if session:
+            return render_template('ask_question.html')
+        else:
+            return redirect(url_for('login_route'))
     else:
         title = escape(request.form['title'])
         msg = escape(request.form['message'])
@@ -57,8 +62,11 @@ def add_question_route():
 @app.route('/question/<int:question_id>/new-answer', methods=['POST', 'GET'])
 def answer_route(question_id=None):
     if request.method == 'GET':
-        title = 'Add answer - Ask mate'
-        return render_template('add_answer.html', question_id=question_id, title=title)
+        if session:
+            title = 'Add answer - Ask mate'
+            return render_template('add_answer.html', question_id=question_id, title=title)
+        else:
+            return redirect(url_for('login_route'))
     else:
         msg = escape(request.form['answer-msg'])
         quest_id = escape(request.form['id'])
@@ -69,8 +77,11 @@ def answer_route(question_id=None):
 @app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
 def question_comment_route(question_id=None):
     if request.method == 'GET':
-        title = 'Add coment to question - Ask mate'
-        return render_template('question_comment.html', question_id=question_id, title=title)
+        if session:
+            title = 'Add comment to question - Ask mate'
+            return render_template('question_comment.html', question_id=question_id, title=title)
+        else:
+            return redirect(url_for('login_route'))
     else:
         comment_message = request.form['comment-msg']
         data_manager.insert_question_comment(question_id, comment_message)
@@ -80,9 +91,12 @@ def question_comment_route(question_id=None):
 @app.route('/answer/<question_id>/<answer_id>/new-comment', methods=['POST', 'GET'])
 def answer_comment_route(answer_id=None, question_id=None):
     if request.method == 'GET':
-        title = 'Add coment to answer - Ask mate'
-        return render_template('answer_comment.html', answer_id=answer_id,
-                               question_id=question_id, title=title)
+        if session:
+            title = 'Add comment to answer - Ask mate'
+            return render_template('answer_comment.html', answer_id=answer_id,
+                                   question_id=question_id, title=title)
+        else:
+            return redirect(url_for('login_route'))
     else:
         question_id = request.form['question_id']
         comment_message = request.form['comment-msg']
@@ -126,12 +140,25 @@ def login_route():
     else:
         login = request.form['login']
         password = request.form['password']
-        database_hashed_password = data_manager.get_user_login_data(login)
+        user_login_and_password = data_manager.get_user_login_data(login)
 
-        if util.verify_password(password, database_hashed_password[0]['password']):
-            return 'abc'
+        # user input wrong login
+        if len(user_login_and_password) == 0:
+            return redirect(url_for('list_route'))
+
+        password_match = util.verify_password(password, user_login_and_password[0]['password'])
+
+        if password_match:
+            session['user'] = user_login_and_password[0]['name']
+            return redirect(url_for('list_route'))
         else:
             return redirect(url_for('list_route'))
+
+
+@app.route('/logout')
+def logout_route():
+    session.pop('user')
+    return redirect(url_for('list_route'))
 
 
 @app.errorhandler(404)
