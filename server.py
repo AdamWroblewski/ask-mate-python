@@ -133,6 +133,28 @@ def login_route():
         else:
             return redirect(url_for('list_route'))
 
+#- - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
+@app.route('/question/<int:question_id>/vote-up', methods=['POST', 'GET'])
+def vote_up_question(question_id):
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+@app.route('/question/<int:question_id>/vote-dowm', methods=['POST', 'GET'])
+def vote_down_question(question_id):
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+@app.route('/answer/<int:answer_id>/vote-up', , methods=['POST', 'GET'])
+def vote_up_answer(answer_id):
+
+    return "wqx"#redirect(url_for('question_route', question_id=question_id))
+#
+
+@app.route('/answer/<int:answer_id>/vote-dowm')
+def vote_down_answer(answer_id):
+    return "wcw"#redirect(url_for('question_route', question_id=question_id))
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 @app.errorhandler(404)
 def page_404(e):
