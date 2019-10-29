@@ -1,5 +1,6 @@
 from flask import Flask, escape, render_template, request, redirect, url_for
 import data_manager
+from psycopg2 import ProgrammingError
 import util
 
 app = Flask(__name__)
@@ -18,8 +19,8 @@ def list_route():
 @app.route('/question', defaults={'question_id': None})
 @app.route('/question/<int:question_id>')
 def question_route(question_id):
-    exsiting_ids = data_manager.get_question_ids()
-    if question_id not in exsiting_ids:
+    existing_ids = data_manager.get_question_ids()
+    if question_id not in existing_ids:
         return redirect('/')
 
     post = data_manager.get_question_by_id(question_id)
@@ -28,16 +29,17 @@ def question_route(question_id):
     answers_dict = data_manager.get_all_sorted_answers(question_id)
     id_tuple = data_manager.get_answers_ids(question_id)
 
-    if len(id_tuple) < 1:
-        id_tuple = (-1,)
-
     question_comments_dict = data_manager.get_question_comments(question_id)
-    answer_commnets_dict = data_manager.get_answer_coments(id_tuple)
+    try:
+        answer_comments_dict = data_manager.get_answer_coments(id_tuple)
+    except ProgrammingError:
+        id_tuple = (-1,)
+        answer_comments_dict = data_manager.get_answer_coments(id_tuple)
 
     return render_template('question_page.html', post=post[post_data],
                            answers=answers_dict, question_id=question_id,
                            question_comments=question_comments_dict,
-                           answer_comments=answer_commnets_dict)
+                           answer_comments=answer_comments_dict)
 
 
 @app.route('/add-question', methods=['POST', 'GET'])

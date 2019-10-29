@@ -29,11 +29,11 @@ def get_question_by_id(cursor, question_id):
 @connection.connection_handler
 def get_all_sorted_answers(cursor, question_id):
 
-    cursor.execute(sql.SQL("""
+    cursor.execute("""
                             SELECT * FROM answer
-                            WHERE question_id = {question_id}
+                            WHERE question_id = %(question_id)s
                             ORDER BY submission_time;
-                           """).format(question_id=sql.Literal(question_id)))
+                           """, {'question_id': question_id})
 
     answers_dict = cursor.fetchall()
 
@@ -45,24 +45,8 @@ def find_max_id(cursor):
 
     cursor.execute("SELECT max(id) FROM question;")
 
-    DICT_INDEX_WITH_PARAMETER = 0
     newest_id_question = cursor.fetchall()
-
-    return newest_id_question[DICT_INDEX_WITH_PARAMETER]['max']
-
-
-@connection.connection_handler
-def get_column_headers(cursor, table_header):
-
-    cursor.execute("""
-                    SELECT column_name
-                    FROM INFORMATION_SCHEMA.COLUMNS
-                    WHERE TABLE_NAME = {table_header};
-                   """).format(table_header=sql.Literal(table_header))
-
-    table_header_dict = cursor.fetchall()
-
-    return table_header_dict
+    return newest_id_question[0]['max']
 
 
 @connection.connection_handler
