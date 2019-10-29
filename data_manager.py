@@ -201,6 +201,5 @@ def get_user_login_data(cursor, login):
 
     cursor.execute(sql_query, {'login': login})
     user_data = cursor.fetchall()
-    print(user_data)
 
     return user_data
