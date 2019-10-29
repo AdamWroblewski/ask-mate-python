@@ -1,10 +1,12 @@
 {% extends 'layout.html' %}
     {% block content %}
         <form method="post" action="{{ url_for('login_route') }}">
+            <h3><a href="{{ url_for('list_route') }}">Back to main page</a></h3>
+            <h1>Please log in: </h1>
             <label for="login">Login: </label>
             <input type="text" id="login" name="login"><br>
             <label for="password">Password: </label>
-            <input type="text" id="password" name="password"><br>
+            <input type="password" id="password" name="password"><br>
             <input type="submit" value="Log in">
         </form>
     {% endblock %}
