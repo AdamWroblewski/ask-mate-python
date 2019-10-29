@@ -16,6 +16,10 @@ body {
     display: inline-block;
 }
 
+.title_box img {
+    height: 2em;
+}
+
 .title {
     font-weight: bold;
 }
@@ -52,4 +56,8 @@ strong{
 
 .user{
     margin: 10px;
+}
+
+.clear2 {
+    clear: both;
 }
