@@ -1,4 +1,4 @@
-from flask import Flask, escape, render_template, request, redirect, url_for
+from flask import Flask, escape, render_template, request, redirect, url_for, make_response
 import data_manager
 from psycopg2 import ProgrammingError
 import util
@@ -117,6 +117,21 @@ def register_route():
         password = util.hash_password(request.form['password'])
         data_manager.save_user_data(login, password)
         return redirect(url_for('list_route'))
+
+
+@app.route('/login', methods=['POST', 'GET'])
+def login_route():
+    if request.method == 'GET':
+        return render_template('login.html')
+    else:
+        login = request.form['login']
+        password = request.form['password']
+        database_hashed_password = data_manager.get_user_login_data(login)
+
+        if util.verify_password(password, database_hashed_password[0]['password']):
+            return 'abc'
+        else:
+            return redirect(url_for('list_route'))
 
 
 @app.errorhandler(404)
