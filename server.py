@@ -162,7 +162,7 @@ def vote_up_question(question_id):
 #
 
 
-@app.route('/question/<int:question_id>/vote-dowm', methods=['POST', 'GET'])
+@app.route('/question/<int:question_id>/vote-down', methods=['POST', 'GET'])
 def vote_down_question(question_id):
     data_manager.increment_thumb_question(question_id, False)
     return redirect(url_for('question_route', question_id=question_id))
@@ -180,7 +180,7 @@ def vote_up_answer(answer_id):
 #
 
 
-@app.route('/answer/<int:answer_id>/vote-dowm', methods=['POST', 'GET'])
+@app.route('/answer/<int:answer_id>/vote-down', methods=['POST', 'GET'])
 def vote_down_answer(answer_id):
     data_manager.increment_thumb_answer(answer_id)
 
