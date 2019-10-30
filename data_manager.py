@@ -203,3 +203,58 @@ def get_user_login_data(cursor, login):
     user_data = cursor.fetchall()
 
     return user_data
+
+
+# - - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
+
+@connection.connection_handler
+def update_reputation(cursor, user_id):
+    sql_query = """UPDATE ask_mate_users SET
+                          reputation =
+                          COALESCE( (SELECT SUM(vote_number) FROM question WHERE user_id = %(user_id)s), 0) +
+                          COALESCE( (SELECT SUM(vote_number) FROM answer WHERE user_id = %(user_id)s), 0)
+                   WHERE id = %(user_id)s;"""
+    cursor.execute(sql_query, {'user_id': user_id})
+
+
+@connection.connection_handler
+def modify_reputation(cursor, user_id, difference):
+    sql_query = "UPDATE ask_mate_users SET reputation = reputation + %(diff)s WHERE id = %(user_id)s;"
+    cursor.execute(sql_query, {'diff': difference, 'user_id': user_id})
+
+
+@connection.connection_handler
+def increment_thumb_question(cursor, question_id, vote_up=True):
+    sql_query = "UPDATE question SET vote_number = vote_number - 1 WHERE id = %(question_id)s RETURNING user_id, vote_number;"
+    if vote_up:
+        sql_query = "UPDATE question SET vote_number = vote_number + 1 WHERE id = %(question_id)s RETURNING user_id, vote_number;"
+
+    cursor.execute(sql_query, {'question_id': question_id})
+    user_id = cursor.fetchone()
+
+    if 'user_id' in user_id and user_id['user_id'] is not None:
+        points = 5 if vote_up else -2
+        modify_reputation(user_id['user_id'], points)
+        # update_reputation(user_id['user_id'])
+
+    return user_id
+
+
+@connection.connection_handler
+def increment_thumb_answer(cursor, answer_id, vote_up=True):
+    sql_query = "UPDATE answer SET vote_number = vote_number - 1 WHERE id = %(answer_id)s RETURNING user_id, vote_number;"
+    if vote_up:
+        sql_query = "UPDATE answer SET vote_number = vote_number + 1 WHERE id = %(answer_id)s RETURNING user_id, vote_number;"
+
+    cursor.execute(sql_query, {'answer_id': answer_id})
+    user_id = cursor.fetchone()
+
+    if 'user_id' in user_id and user_id['user_id'] is not None:
+        points = 10 if vote_up else -2
+        modify_reputation(user_id['user_id'], points)
+        # update_reputation(user_id['user_id'])
+
+    return user_id
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
