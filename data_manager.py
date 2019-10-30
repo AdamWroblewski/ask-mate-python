@@ -203,3 +203,51 @@ def get_user_login_data(cursor, login):
     user_data = cursor.fetchall()
 
     return user_data
+
+
+@connection.connection_handler
+def get_answers_by_user_name(cursor, user_name):
+
+    sql_query = """
+                SELECT message, question_id FROM answer AS a
+                JOIN ask_mate_users AS u
+                ON a.user_id = u.id
+                WHERE u.name = %(user_name)s;
+                """
+
+    cursor.execute(sql_query, {'user_name': user_name})
+
+    answer_by_user_name = cursor.fetchall()
+    return answer_by_user_name
+
+
+@connection.connection_handler
+def get_questions_by_user_name(cursor, user_name):
+
+    sql_query = """
+                SELECT q.id, q.message FROM question as q
+                JOIN ask_mate_users AS u
+                ON q.user_id = u.id
+                WHERE u.name = %(user_name)s;
+                """
+
+    cursor.execute(sql_query, {'user_name': user_name})
+
+    question_by_user_name = cursor.fetchall()
+    return question_by_user_name
+
+
+@connection.connection_handler
+def get_comments_by_user_name(cursor, user_name):
+
+    sql_query = """
+                SELECT c.message, c.question_id FROM comment as c 
+                JOIN ask_mate_users AS u
+                ON c.user_id = u.id
+                WHERE u.name = %(user_name)s;
+                """
+
+    cursor.execute(sql_query, {'user_name': user_name})
+
+    comments_by_user_name = cursor.fetchall()
+    return comments_by_user_name
