@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'layout.html' %}
+    {% block content %}
+        <h2>Your questions: </h2>
+        {% for question in user_question_dict %}
+            <p>
+                <a href="{{ url_for('question_route', question_id=question['id']) }}">
+                    {{ question['message'] }}
+                </a>
+            </p>
+        {% endfor %}
+        <h2>Your answers: </h2>
+        {% for answer in user_answers_dict %}
+            <p>
+                <a href="{{url_for('question_route', question_id=answer['question_id'] ) }}">
+                    {{ answer['message'] }}
+                </a>
+            </p>
+        {% endfor %}
+        <h2>Your comments: </h2>
+        {% for comment in user_comments_dict %}
+            <p>
+                <a href="{{ url_for('question_route', question_id=comment['question_id']) }}">
+                    {{ comment['message'] }}
+                </a>
+            </p>
+        {% endfor %}
+    {% endblock %}
