@@ -1,7 +1,6 @@
 {% extends 'layout.html' %}
     {% block content %}
         <div class="question">
-            <h1><a href="{{url_for('list_route')}}">Back to question list</a></h1>
             <h1><a href="{{url_for('answer_route', question_id=question_id)}}">Add answer</a></h1>
             <div class="title_box">
                 <div>
