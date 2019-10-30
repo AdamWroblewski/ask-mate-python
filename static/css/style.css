@@ -61,3 +61,10 @@ strong{
 .clear2 {
     clear: both;
 }
+
+#logo_redirect{
+    width: 3%;
+    height: 3%;
+    vertical-align:middle;
+}
+

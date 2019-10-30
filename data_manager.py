@@ -50,25 +50,25 @@ def find_max_id(cursor):
 
 
 @connection.connection_handler
-def add_new_question(cursor, title, message, img=None):
+def add_new_question(cursor, title, message, user_id, img=None):
 
     sql_query = """INSERT INTO 
-                    question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (now(), 0, 0, %s, %s, %s);"""
+                    question (submission_time, view_number, vote_number, title, message, image, user_id)
+                    VALUES (now(), 0, 0, %s, %s, %s, %s);"""
 
-    cursor.execute(sql_query, (title, message, img))
+    cursor.execute(sql_query, (title, message, img, user_id))
 
 
 @connection.connection_handler
-def add_new_answer(cursor, message, question_id, img=None):
+def add_new_answer(cursor, message, question_id, user_id, img=None):
 
     sql_query = """
                 INSERT INTO
-                answer (submission_time, vote_number, question_id, message, image)
-                VALUES (date_trunc('second', now()), 0, %s, %s, %s);
+                answer (submission_time, vote_number, question_id, message, user_id, image)
+                VALUES (date_trunc('second', now()), 0, %s, %s, %s, %s);
                 """
 
-    cursor.execute(sql_query, (question_id, message, img))
+    cursor.execute(sql_query, (question_id, message, user_id, img))
 
 
 @connection.connection_handler
@@ -92,15 +92,15 @@ def get_question_by_answer_id(cursor, answer_id):
 #
 
 @connection.connection_handler
-def insert_question_comment(cursor, question_id, message):
+def insert_question_comment(cursor, question_id, message, user_id):
 
     sql_query = """
                 INSERT INTO
-                comment (question_id, message, submission_time, edited_count)
-                VALUES (%s, %s, date_trunc('second', now()), 0);
+                comment (question_id, message, submission_time, edited_count, user_id)
+                VALUES (%s, %s, date_trunc('second', now()), 0, %s);
                 """
 
-    cursor.execute(sql_query, (question_id, message))
+    cursor.execute(sql_query, (question_id, message, user_id))
 
 
 @connection.connection_handler
@@ -116,15 +116,15 @@ def get_question_comments(cursor, question_id):
 
 
 @connection.connection_handler
-def insert_answer_comment(cursor, answer_id, message):
+def insert_answer_comment(cursor, answer_id, message, user_id):
 
     sql_query = """
                 INSERT INTO
-                comment (answer_id, message, submission_time, edited_count)
-                VALUES (%s, %s, date_trunc('second', now()), 0);
+                comment (answer_id, message, user_id, submission_time, edited_count)
+                VALUES (%s, %s, %s, date_trunc('second', now()), 0);
                 """
 
-    cursor.execute(sql_query, (answer_id, message))
+    cursor.execute(sql_query, (answer_id, message, user_id))
 
 
 @connection.connection_handler
@@ -195,7 +195,7 @@ def save_user_data(cursor, login, password):
 def get_user_login_data(cursor, login):
 
     sql_query = """
-                SELECT name, password from ask_mate_users
+                SELECT id, name, password from ask_mate_users
                 WHERE name=%(login)s
                 """
 
@@ -204,6 +204,53 @@ def get_user_login_data(cursor, login):
 
     return user_data
 
+
+@connection.connection_handler
+def get_answers_by_user_name(cursor, user_name):
+
+    sql_query = """
+                SELECT message, question_id FROM answer AS a
+                JOIN ask_mate_users AS u
+                ON a.user_id = u.id
+                WHERE u.name = %(user_name)s;
+                """
+
+    cursor.execute(sql_query, {'user_name': user_name})
+
+    answer_by_user_name = cursor.fetchall()
+    return answer_by_user_name
+
+
+@connection.connection_handler
+def get_questions_by_user_name(cursor, user_name):
+
+    sql_query = """
+                SELECT q.id, q.message FROM question as q
+                JOIN ask_mate_users AS u
+                ON q.user_id = u.id
+                WHERE u.name = %(user_name)s;
+                """
+
+    cursor.execute(sql_query, {'user_name': user_name})
+
+    question_by_user_name = cursor.fetchall()
+    return question_by_user_name
+
+
+@connection.connection_handler
+def get_comments_by_user_name(cursor, user_name):
+
+    sql_query = """
+                SELECT c.message, c.question_id FROM comment as c 
+                JOIN ask_mate_users AS u
+                ON c.user_id = u.id
+                WHERE u.name = %(user_name)s;
+                """
+
+    cursor.execute(sql_query, {'user_name': user_name})
+
+    comments_by_user_name = cursor.fetchall()
+    return comments_by_user_name
 
 # - - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
 
@@ -257,4 +304,3 @@ def increment_thumb_answer(cursor, answer_id, vote_up=True):
     return user_id
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-

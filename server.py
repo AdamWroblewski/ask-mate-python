@@ -47,14 +47,14 @@ def question_route(question_id):
 @app.route('/add-question', methods=['POST', 'GET'])
 def add_question_route():
     if request.method == 'GET':
-        if session:
+        if 'user' in session:
             return render_template('ask_question.html')
         else:
             return redirect(url_for('login_route'))
     else:
         title = escape(request.form['title'])
         msg = escape(request.form['message'])
-        data_manager.add_new_question(title, msg)
+        data_manager.add_new_question(title, msg, session['id'])
         question_id = data_manager.find_max_id()
         return redirect(url_for('question_route', question_id=question_id))
 
@@ -62,7 +62,7 @@ def add_question_route():
 @app.route('/question/<int:question_id>/new-answer', methods=['POST', 'GET'])
 def answer_route(question_id=None):
     if request.method == 'GET':
-        if session:
+        if 'user' in session:
             title = 'Add answer - Ask mate'
             return render_template('add_answer.html', question_id=question_id, title=title)
         else:
@@ -70,28 +70,28 @@ def answer_route(question_id=None):
     else:
         msg = escape(request.form['answer-msg'])
         quest_id = escape(request.form['id'])
-        data_manager.add_new_answer(msg, quest_id)
+        data_manager.add_new_answer(msg, quest_id, session['id'])
         return redirect(url_for('question_route', question_id=question_id))
 
 
 @app.route('/question/<question_id>/new-comment', methods=['POST', 'GET'])
 def question_comment_route(question_id=None):
     if request.method == 'GET':
-        if session:
+        if 'user' in session:
             title = 'Add comment to question - Ask mate'
             return render_template('question_comment.html', question_id=question_id, title=title)
         else:
             return redirect(url_for('login_route'))
     else:
         comment_message = request.form['comment-msg']
-        data_manager.insert_question_comment(question_id, comment_message)
+        data_manager.insert_question_comment(question_id, comment_message, session['id'])
         return redirect(url_for('question_route', question_id=question_id))
 
 
 @app.route('/answer/<question_id>/<answer_id>/new-comment', methods=['POST', 'GET'])
 def answer_comment_route(answer_id=None, question_id=None):
     if request.method == 'GET':
-        if session:
+        if 'user' in session:
             title = 'Add comment to answer - Ask mate'
             return render_template('answer_comment.html', answer_id=answer_id,
                                    question_id=question_id, title=title)
@@ -100,7 +100,7 @@ def answer_comment_route(answer_id=None, question_id=None):
     else:
         question_id = request.form['question_id']
         comment_message = request.form['comment-msg']
-        data_manager.insert_answer_comment(answer_id, comment_message)
+        data_manager.insert_answer_comment(answer_id, comment_message, session['id'])
         return redirect(url_for('question_route', question_id=question_id))
 
 
@@ -150,9 +150,11 @@ def login_route():
 
         if password_match:
             session['user'] = user_login_and_password[0]['name']
+            session['id'] = user_login_and_password[0]['id']
             return redirect(url_for('list_route'))
         else:
             return redirect(url_for('list_route'))
+
 
 # - - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
 @app.route('/question/<int:question_id>/vote-up', methods=['POST', 'GET'])
@@ -191,10 +193,23 @@ def vote_down_answer(answer_id):
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+
 @app.route('/logout')
 def logout_route():
     session.pop('user')
+    session.pop('id')
     return redirect(url_for('list_route'))
+
+
+@app.route('/user')
+def user_page_route():
+    user_answers_dict = data_manager.get_answers_by_user_name(session['user'])
+    user_question_dict = data_manager.get_questions_by_user_name(session['user'])
+    user_comments_dict = data_manager.get_comments_by_user_name(session['user'])
+    return render_template('user_page.html',
+                           user_answers_dict=user_answers_dict,
+                           user_question_dict=user_question_dict,
+                           user_comments_dict=user_comments_dict)
 
 
 @app.errorhandler(404)

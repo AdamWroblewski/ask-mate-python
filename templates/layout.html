@@ -6,13 +6,20 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
-    {% if not session['user'] %}
-        <a class="user" href="{{ url_for('register_route') }}">Register new user</a>
-        <a class="user" href="{{ url_for('login_route') }}">Log in</a><br>
-    {% else %}
-        <a class="user" href="{{ url_for('logout_route') }}">Log out</a>
-        <h2>Hello {{ session['user'] }}</h2>
-    {% endif %}
+    <div>
+        <a href="{{ url_for('list_route') }}">
+            <img id="logo_redirect" src="{{url_for('static', filename='images/awas_logo.jpg')}}" />
+            <span id="redirect_header">Ask mate</span>
+        </a>
+        {% if not session['user'] %}
+            <a class="user" href="{{ url_for('register_route') }}">Register new user</a>
+            <a class="user" href="{{ url_for('login_route') }}">Log in</a><br>
+        {% else %}
+            <a class="user" href="{{ url_for('user_page_route') }}">Your profile</a>
+            <a class="user" href="{{ url_for('logout_route') }}">Log out</a>
+            <h2>Hello {{ session['user'] }}</h2>
+        {% endif %}
+    </div>
     {% block content %}{% endblock %}
 </body>
 </html>
