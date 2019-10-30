@@ -50,25 +50,25 @@ def find_max_id(cursor):
 
 
 @connection.connection_handler
-def add_new_question(cursor, title, message, img=None):
+def add_new_question(cursor, title, message, user_id, img=None):
 
     sql_query = """INSERT INTO 
-                    question (submission_time, view_number, vote_number, title, message, image)
-                    VALUES (now(), 0, 0, %s, %s, %s);"""
+                    question (submission_time, view_number, vote_number, title, message, image, user_id)
+                    VALUES (now(), 0, 0, %s, %s, %s, %s);"""
 
-    cursor.execute(sql_query, (title, message, img))
+    cursor.execute(sql_query, (title, message, img, user_id))
 
 
 @connection.connection_handler
-def add_new_answer(cursor, message, question_id, img=None):
+def add_new_answer(cursor, message, question_id, user_id, img=None):
 
     sql_query = """
                 INSERT INTO
-                answer (submission_time, vote_number, question_id, message, image)
-                VALUES (date_trunc('second', now()), 0, %s, %s, %s);
+                answer (submission_time, vote_number, question_id, message, user_id, image)
+                VALUES (date_trunc('second', now()), 0, %s, %s, %s, %s);
                 """
 
-    cursor.execute(sql_query, (question_id, message, img))
+    cursor.execute(sql_query, (question_id, message, user_id, img))
 
 
 @connection.connection_handler
@@ -116,15 +116,16 @@ def get_question_comments(cursor, question_id):
 
 
 @connection.connection_handler
-def insert_answer_comment(cursor, answer_id, message):
+def insert_answer_comment(cursor, answer_id, message, user_id):
 
     sql_query = """
                 INSERT INTO
-                comment (answer_id, message, submission_time, edited_count)
-                VALUES (%s, %s, date_trunc('second', now()), 0);
+                comment (answer_id, message, user_id, submission_time, edited_count)
+                VALUES (%s, %s, %s, date_trunc('second', now()), 0);
                 """
 
-    cursor.execute(sql_query, (answer_id, message))
+    print(user_id)
+    cursor.execute(sql_query, (answer_id, message, user_id))
 
 
 @connection.connection_handler
@@ -195,7 +196,7 @@ def save_user_data(cursor, login, password):
 def get_user_login_data(cursor, login):
 
     sql_query = """
-                SELECT name, password from ask_mate_users
+                SELECT id, name, password from ask_mate_users
                 WHERE name=%(login)s
                 """
 
