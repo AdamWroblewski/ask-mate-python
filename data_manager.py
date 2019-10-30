@@ -92,15 +92,15 @@ def get_question_by_answer_id(cursor, answer_id):
 #
 
 @connection.connection_handler
-def insert_question_comment(cursor, question_id, message):
+def insert_question_comment(cursor, question_id, message, user_id):
 
     sql_query = """
                 INSERT INTO
-                comment (question_id, message, submission_time, edited_count)
-                VALUES (%s, %s, date_trunc('second', now()), 0);
+                comment (question_id, message, submission_time, edited_count, user_id)
+                VALUES (%s, %s, date_trunc('second', now()), 0, %s);
                 """
 
-    cursor.execute(sql_query, (question_id, message))
+    cursor.execute(sql_query, (question_id, message, user_id))
 
 
 @connection.connection_handler
@@ -124,7 +124,6 @@ def insert_answer_comment(cursor, answer_id, message, user_id):
                 VALUES (%s, %s, %s, date_trunc('second', now()), 0);
                 """
 
-    print(user_id)
     cursor.execute(sql_query, (answer_id, message, user_id))
 
 
