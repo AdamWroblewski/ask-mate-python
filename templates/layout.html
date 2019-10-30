@@ -10,6 +10,7 @@
         <a class="user" href="{{ url_for('register_route') }}">Register new user</a>
         <a class="user" href="{{ url_for('login_route') }}">Log in</a><br>
     {% else %}
+        <a class="user" href="{{ url_for('user_page_route') }}">Your profile</a>
         <a class="user" href="{{ url_for('logout_route') }}">Log out</a>
         <h2>Hello {{ session['user'] }}</h2>
     {% endif %}
