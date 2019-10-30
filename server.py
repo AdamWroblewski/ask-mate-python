@@ -121,6 +121,38 @@ def search_route():
                            search_question_result_dict=search_question_result_dict)
 
 
+# - - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
+@app.route('/question/<int:question_id>/vote-up', methods=['POST', 'GET'])
+def vote_up_question(question_id):
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+
+@app.route('/question/<int:question_id>/vote-dowm', methods=['POST', 'GET'])
+def vote_down_question(question_id):
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+
+@app.route('/answer/<int:answer_id>/vote-up', methods=['POST', 'GET'])
+def vote_up_answer(answer_id):
+    question_id = data_manager.get_question_by_answer_id(answer_id)
+    question_id = question_id['question_id']
+
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+
+@app.route('/answer/<int:answer_id>/vote-dowm', methods=['POST', 'GET'])
+def vote_down_answer(answer_id):
+    question_id = data_manager.get_question_by_answer_id(answer_id)
+    question_id = question_id['question_id']
+
+    return redirect(url_for('question_route', question_id=question_id))
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+
 @app.route('/register', methods=['POST', 'GET'])
 def register_route():
     if request.method == 'GET':
@@ -154,38 +186,22 @@ def login_route():
         else:
             return redirect(url_for('list_route'))
 
-#- - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
-@app.route('/question/<int:question_id>/vote-up', methods=['POST', 'GET'])
-def vote_up_question(question_id):
-    return redirect(url_for('question_route', question_id=question_id))
-#
-
-@app.route('/question/<int:question_id>/vote-dowm', methods=['POST', 'GET'])
-def vote_down_question(question_id):
-    return redirect(url_for('question_route', question_id=question_id))
-#
-
-@app.route('/answer/<int:answer_id>/vote-up', methods=['POST', 'GET'])
-def vote_up_answer(answer_id):
-    question_id = data_manager.get_question_by_answer_id(answer_id)
-    question_id = question_id['question_id']
-
-    return redirect(url_for('question_route', question_id=question_id))
-#
-
-@app.route('/answer/<int:answer_id>/vote-dowm', methods=['POST', 'GET'])
-def vote_down_answer(answer_id):
-    question_id = data_manager.get_question_by_answer_id(answer_id)
-    question_id = question_id['question_id']
-
-    return redirect(url_for('question_route', question_id=question_id))
-
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 @app.route('/logout')
 def logout_route():
     session.pop('user')
     return redirect(url_for('list_route'))
+
+
+@app.route('/user')
+def user_page_route():
+    user_answers_dict = data_manager.get_answers_by_user_name(session['user'])
+    user_question_dict = data_manager.get_questions_by_user_name(session['user'])
+    user_comments_dict = data_manager.get_comments_by_user_name(session['user'])
+    return render_template('user_page.html',
+                           user_answers_dict=user_answers_dict,
+                           user_question_dict=user_question_dict,
+                           user_comments_dict=user_comments_dict)
 
 
 @app.errorhandler(404)
