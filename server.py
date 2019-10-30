@@ -182,7 +182,7 @@ def vote_up_answer(answer_id):
 
 @app.route('/answer/<int:answer_id>/vote-down', methods=['POST', 'GET'])
 def vote_down_answer(answer_id):
-    data_manager.increment_thumb_answer(answer_id)
+    data_manager.increment_thumb_answer(answer_id, False)
 
     question_id = data_manager.get_question_by_answer_id(answer_id)
     question_id = question_id['question_id']
