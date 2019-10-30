@@ -228,7 +228,7 @@ def increment_thumb_question(cursor, question_id, vote_up=True):
     cursor.execute(sql_query, {'question_id': question_id})
     user_id = cursor.fetchone()
 
-    if 'user_id' in user_id and user_id['user_id'] not None:
+    if 'user_id' in user_id and user_id['user_id'] is not None:
         update_reputation(cursor, user_id['user_id'])
 
     return user_id
@@ -243,7 +243,7 @@ def increment_thumb_answer(cursor, answer_id, vote_up=True):
     cursor.execute(sql_query, {'answer_id': answer_id})
     user_id = cursor.fetchone()
 
-    if 'user_id' in user_id and user_id['user_id'] not None:
+    if 'user_id' in user_id and user_id['user_id'] is not None:
         update_reputation(cursor, user_id['user_id'])
 
     return user_id
