@@ -121,38 +121,6 @@ def search_route():
                            search_question_result_dict=search_question_result_dict)
 
 
-# - - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
-@app.route('/question/<int:question_id>/vote-up', methods=['POST', 'GET'])
-def vote_up_question(question_id):
-    return redirect(url_for('question_route', question_id=question_id))
-#
-
-
-@app.route('/question/<int:question_id>/vote-dowm', methods=['POST', 'GET'])
-def vote_down_question(question_id):
-    return redirect(url_for('question_route', question_id=question_id))
-#
-
-
-@app.route('/answer/<int:answer_id>/vote-up', methods=['POST', 'GET'])
-def vote_up_answer(answer_id):
-    question_id = data_manager.get_question_by_answer_id(answer_id)
-    question_id = question_id['question_id']
-
-    return redirect(url_for('question_route', question_id=question_id))
-#
-
-
-@app.route('/answer/<int:answer_id>/vote-dowm', methods=['POST', 'GET'])
-def vote_down_answer(answer_id):
-    question_id = data_manager.get_question_by_answer_id(answer_id)
-    question_id = question_id['question_id']
-
-    return redirect(url_for('question_route', question_id=question_id))
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-
 @app.route('/register', methods=['POST', 'GET'])
 def register_route():
     if request.method == 'GET':
@@ -186,6 +154,44 @@ def login_route():
             return redirect(url_for('list_route'))
         else:
             return redirect(url_for('list_route'))
+
+
+# - - - - - - - - - - - - - - - - - - - - Vote services - - - - - - - - - - - - - - - - - - - - -
+@app.route('/question/<int:question_id>/vote-up', methods=['POST', 'GET'])
+def vote_up_question(question_id):
+    data_manager.increment_thumb_question(question_id)
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+
+@app.route('/question/<int:question_id>/vote-down', methods=['POST', 'GET'])
+def vote_down_question(question_id):
+    data_manager.increment_thumb_question(question_id, False)
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+
+@app.route('/answer/<int:answer_id>/vote-up', methods=['POST', 'GET'])
+def vote_up_answer(answer_id):
+    data_manager.increment_thumb_answer(answer_id)
+
+    question_id = data_manager.get_question_by_answer_id(answer_id)
+    question_id = question_id['question_id']
+
+    return redirect(url_for('question_route', question_id=question_id))
+#
+
+
+@app.route('/answer/<int:answer_id>/vote-down', methods=['POST', 'GET'])
+def vote_down_answer(answer_id):
+    data_manager.increment_thumb_answer(answer_id, False)
+
+    question_id = data_manager.get_question_by_answer_id(answer_id)
+    question_id = question_id['question_id']
+
+    return redirect(url_for('question_route', question_id=question_id))
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
 @app.route('/logout')
