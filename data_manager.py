@@ -211,15 +211,19 @@ def get_user_login_data(cursor, login):
 def update_reputation(cursor, user_id):
     sql_query = """UPDATE ask_mate_users SET
                           reputation = (SELECT SUM(vote_number) FROM question WHERE user_id = %(user_id)s) + (SELECT SUM(vote_number) FROM answer WHERE user_id = %(user_id)s)
-                   WHERE id = %(user_id)s"""
+                   WHERE id = %(user_id)s;"""
     cursor.execute(sql_query, {'user_id': user_id})
+
+@connection.connection_handler
+def modify_reputation(cursor, user_id, difference):
+    sql_query = "UPDATE ask_mate_users SET reputation = reputation + %(diff)s WHERE id = %(user_id)s;"
 
 
 @connection.connection_handler
 def increment_thumb_question(cursor, question_id, vote_up=True):
-    sql_query = "UPDATE question SET vote_number = vote_number - 1 WHERE id = %(question_id)s RETURNING user_id, vote_number"
+    sql_query = "UPDATE question SET vote_number = vote_number - 1 WHERE id = %(question_id)s RETURNING user_id, vote_number;"
     if vote_up:
-        sql_query = "UPDATE question SET vote_number = vote_number + 1 WHERE id = %(question_id)s RETURNING user_id, vote_number"
+        sql_query = "UPDATE question SET vote_number = vote_number + 1 WHERE id = %(question_id)s RETURNING user_id, vote_number;"
 
     cursor.execute(sql_query, {'question_id': question_id})
     user_id = cursor.fetchone()
@@ -232,9 +236,9 @@ def increment_thumb_question(cursor, question_id, vote_up=True):
 
 @connection.connection_handler
 def increment_thumb_answer(cursor, answer_id, vote_up=True):
-    sql_query = "UPDATE answer SET vote_number = vote_number - 1 WHERE id = %(answer_id)s RETURNING user_id, vote_number"
+    sql_query = "UPDATE answer SET vote_number = vote_number - 1 WHERE id = %(answer_id)s RETURNING user_id, vote_number;"
     if vote_up:
-        sql_query = "UPDATE answer SET vote_number = vote_number + 1 WHERE id = %(answer_id)s RETURNING user_id, vote_number"
+        sql_query = "UPDATE answer SET vote_number = vote_number + 1 WHERE id = %(answer_id)s RETURNING user_id, vote_number;"
 
     cursor.execute(sql_query, {'answer_id': answer_id})
     user_id = cursor.fetchone()
